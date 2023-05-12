@@ -1,0 +1,40 @@
+@startuml
+interface ScoreDao{
+    + {abstract} findRecordById(int id):int
+    + {abstract} getAllScore():List<ScoreRecord>
+    + {abstract} putAllRecords():void
+    + {abstract} insertScoreRecord(ScoreRecord newRecord):boolean
+    + {abstract} deleteScoreRecord(int id):boolean
+    + {abstract} getRecordSize():int
+}
+class ScoreRecord{
+    - id:int
+    - player:String
+    - score:int
+    + ScoreRecord(int id, String player, int score)
+    + getId():int
+    + getPlayer():int
+    + getScore():int
+}
+class ScoreDaoImpl{
+    - records:List<ScoreRecord>
+    + findRecordById(int id):void
+    + getAllScore():List<ScoreRecord>
+    + putAllRecords():void
+    + insertScoreRecord(ScoreRecord newRecord)):boolean
+    + deleteScoreRecord(int id):boolean
+    + writeObjectToFile():void
+    + readObjectFromFile():void
+    + resortArrayList():void
+    + getRecordSize():int
+}
+class Game{}
+
+note left of Game: Client
+note left of ScoreRecord: VO Entity
+note left of ScoreDao: DAO Interface
+note left of ScoreDaoImpl: Concrete DAO Class
+Game ..> ScoreDao
+ScoreDaoImpl --> ScoreRecord
+ScoreDao <|.. ScoreDaoImpl
+@enduml

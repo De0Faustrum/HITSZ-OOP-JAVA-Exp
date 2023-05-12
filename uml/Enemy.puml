@@ -1,0 +1,98 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+    + response():void
+}
+
+abstract class AbstractAircraft
+{
+	# maxHp:int
+    # hp:int
+    # shootNum:int
+    # direction
+    # supplyFactory:SupplyFactory
+    # trajectoryStrategy:TrajectoryStrategy
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + decreaseHp(int decrease):void
+    + increaseHp(int increaseValue):void
+    + getHp():int
+    + getShootNum():int
+    + getDirection:int
+    + getShootDamage():int
+    + shoot():List<BaseBullet>
+    + forward():void
+}
+
+class AbstractEnemy{
+     + AbstractEnemy(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+     + {abstract} supplySummon(List<AbstractSupply> propSupplies):void
+}
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+class EliteEnemy{
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+class BossEnemy{
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+
+interface AircraftFactory{
+    +{abstract}createAircraft:Enemy
+}
+class MobFactory{
+    +createAircraft:AbstractEnemy
+}
+class EliteFactory{
+    +createAircraft:AbstractEnemy
+}
+class BossFactory{
+    +createAircraft:AbstractEnemy
+}
+
+
+AbstractAircraft <|-- AbstractEnemy
+AbstractFlyingObject <|-- AbstractAircraft
+
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- BossEnemy
+
+AircraftFactory <|.. MobFactory
+AircraftFactory <|.. EliteFactory
+AircraftFactory <|.. BossFactory
+
+MobFactory ..> MobEnemy
+EliteFactory ..> EliteEnemy
+BossFactory ..> BossEnemy
+AircraftFactory ..> AbstractAircraft
+
+
+@enduml

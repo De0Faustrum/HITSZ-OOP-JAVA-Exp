@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface AbstractObserver{
+    +{abstract}response():void
+}
+class ObservedSubject{
+    # observers:List<AbstractFlyingObject>
+    + attach(AbstractFlyingObject observer):void
+    + detach():void
+    + notifyObserver():void
+}
+class Game{
+}
+class AbstractFlyingObject{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+    + response():void
+}
+
+ObservedSubject o--> AbstractObserver
+Game ..> ObservedSubject
+AbstractObserver <|.. AbstractFlyingObject
+
+@enduml

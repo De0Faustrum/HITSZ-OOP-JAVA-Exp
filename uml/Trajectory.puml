@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/class-diagram
+interface TrajectoryStrategy{
+    + {abstract} shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+class DirectShootStrategy{
+    + shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+class ScatteredShootStrategy{
+    + shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+abstract class AbstractAircraft {
+    - TrajectoryStrategy trajectoryStrategy
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + shoot():List<BaseBullet>
+}
+class Game{}
+
+note left of AbstractAircraft::shoot
+strategy.execute()
+end note
+
+note top of Game: Client
+note right of AbstractAircraft: Context
+
+
+TrajectoryStrategy <|.. DirectShootStrategy
+TrajectoryStrategy <|.. ScatteredShootStrategy
+AbstractAircraft o--> TrajectoryStrategy
+Game ..> AbstractAircraft
+
+@enduml

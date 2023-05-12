@@ -1,0 +1,77 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+    + response():void
+}
+
+abstract class AbstractItem{
+    + AbstractItem(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + {abstract} supplyActive(AbstractAircraft heroAircraft, List<AbstractEnemy> enemyAircrafts):void
+}
+class HealthSupply{
+    +HealthSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractAircraft> enemyAircrafts):void
+}
+class FireSupply{
+    +FireSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractAircraft> enemyAircrafts):void
+}
+class BombSupply{
+    +BombSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractAircraft> enemyAircrafts):void
+}
+
+interface SupplyFactory{
+    +{abstract}createSupply:AbstractItem
+}
+class HealthSupplyFactory{
+    +createSupply:AbstractItem
+}
+class FireSupplyFactory{
+    +createSupply:AbstractItem
+}
+class BombSupplyFactory{
+    +createSupply:AbstractItem
+}
+
+
+AbstractFlyingObject <|-- AbstractItem
+
+AbstractItem <|-- HealthSupply
+AbstractItem <|-- FireSupply
+AbstractItem <|-- BombSupply
+
+SupplyFactory <|.. HealthSupplyFactory
+SupplyFactory <|.. FireSupplyFactory
+SupplyFactory <|.. BombSupplyFactory
+
+HealthSupplyFactory ..> HealthSupply
+FireSupplyFactory ..> FireSupply
+BombSupplyFactory ..> BombSupply
+
+SupplyFactory ..>AbstractItem
+@enduml

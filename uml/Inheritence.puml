@@ -1,0 +1,252 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+abstract class AbstractFlyingObject
+{
+    # locationX:int
+    # locationY:int
+    # speedX:int
+    # speedY:int
+    # image:BufferedImage
+    # width:int
+    # height:int
+    # isValid:boolean
+
+    + AbstractFlyingObject(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + crash(AbstractFlyingObject flyingObject):boolean
+    + setLocation(double locationX, double locationY):void
+    + getLocationX():int
+    + getLocationY():int
+    + getSpeedY():int
+    + getImage():BufferedImage
+    + getWidth():int
+    + getHeight():int
+    + notValid():boolean
+    + vanish():void
+    + response():void
+}
+
+abstract class AbstractAircraft
+{
+	# maxHp:int
+    # hp:int
+    # shootNum:int
+    # direction
+    # supplyFactory:SupplyFactory
+    # trajectoryStrategy:TrajectoryStrategy
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + decreaseHp(int decrease):void
+    + increaseHp(int increaseValue):void
+    + getHp():int
+    + getShootNum():int
+    + getDirection:int
+    + getShootDamage():int
+    + shoot():List<BaseBullet>
+    + forward():void
+}
+abstract class AbstractEnemy{
+    + AbstractEnemy(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + {abstract} supplySummon(List<AbstractSupply> propSupplies):void
+}
+class HeroAircraft {
+    - {static}instance:HeroAircraft
+    - HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + {static}getHeroAircraftInstance():HeroAircraft
+    + forward():void
+    + bulletReinforce():int
+}
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+class EliteEnemy{
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, TrajectoryStrategy trajectoryStrategy)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+class BossEnemy{
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + supplySummon(List<AbstractItem> propSupplys)):void
+}
+
+
+
+
+interface AircraftFactory{
+    + {abstract} createAircraft():AbstractAircraft
+}
+class MobFactory{
+    + createAircraft():AbstractEnemy
+}
+class EliteFactory{
+    + createAircraft():AbstractEnemy
+}
+class BossFactory{
+    + createAircraft():AbstractEnemy
+}
+
+
+
+
+abstract class AbstractSupply{
+    + AbstractItem(int locationX, int locationY, int speedX, int speedY)
+    + forward():void
+    + {abstract} supplyActive(AbstractAircraft heroAircraft, List<AbstractEnemy> enemyAircrafts):void
+}
+class HealthSupply{
+    +HealthSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractEnemy> enemyAircrafts):void
+}
+class FireSupply{
+    +FireSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractEnemy> enemyAircrafts):void
+}
+class BombSupply{
+    +BombSupply(int locationX, int locationY, int speedX, int speedY)
+    +supplyActive(AbstractAircraft heroAircraft, List<AbstractEnemy> enemyAircrafts):void
+}
+
+
+
+
+interface SupplyFactory{
+    + {abstract}createSupply(int locationX, int locationY):AbstractSupply
+}
+class HealthSupplyFactory{
+    + createSupply(int locationX, int locationY):AbstractSupply
+}
+class FireSupplyFactory{
+    + createSupply(int locationX, int locationY):AbstractSupply
+}
+class BombSupplyFactory{
+    + createSupply(int locationX, int locationY):AbstractSupply
+}
+
+abstract class BaseBullet
+{
+    - power:int
+    + BaseBullet(int locationX, int locationY, int speedX, int speedY, int power)
+    + forward():void
+	+ getPower():int
+}
+
+class HeroBullet {
+    + HeroBullet(int locationX, int locationY, int speedX, int speedY, int power)
+}
+
+class EnemyBullet {
+    + EnemyBullet(int locationX, int locationY, int speedX, int speedY, int power)
+}
+
+interface ScoreDao{
+    + {abstract} findRecordById(int id):int
+    + {abstract} getAllScore():List<ScoreRecord>
+    + {abstract} putAllRecords():void
+    + {abstract} insertScoreRecord(ScoreRecord newRecord):boolean
+    + {abstract} deleteScoreRecord(int id):boolean
+    + {abstract} getRecordSize():int
+}
+class ScoreRecord{
+    - id:int
+    - player:String
+    - score:int
+    + ScoreRecord(int id, String player, int score)
+    + getId():int
+    + getPlayer():int
+    + getScore():int
+}
+class ScoreDaoImpl{
+    - records:List<ScoreRecord>
+    + findRecordById(int id):void
+    + getAllScore():List<ScoreRecord>
+    + putAllRecords():void
+    + insertScoreRecord(ScoreRecord newRecord)):boolean
+    + deleteScoreRecord(int id):boolean
+    + writeObjectToFile():void
+    + readObjectFromFile():void
+    + resortArrayList():void
+    + getRecordSize():int
+}
+
+interface TrajectoryStrategy{
+    + {abstract} shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+class DirectShootStrategy{
+    + shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+class ScatteredShootStrategy{
+    + shootStrategy(AbstractAircraft subject):List<BaseBullet>
+}
+
+class Game{}
+class EasyGame{}
+class CommonGame{}
+class HardGame{}
+class StaticConfiguration{}
+interface AbstractObserver{
+    +{abstract}response():void
+}
+class ObservedSubject{
+    # observers:List<AbstractFlyingObject>
+    + attach(AbstractFlyingObject observer):void
+    + detach():void
+    + notifyObserver():void
+}
+
+Game <|-- EasyGame
+Game <|-- CommonGame
+Game <|-- HardGame
+Game o--> StaticConfiguration
+Game o--> ScoreDaoImpl
+Game o--> AbstractFlyingObject
+
+ObservedSubject o--> AbstractObserver
+Game ..> ObservedSubject
+AbstractObserver <|.. AbstractFlyingObject
+
+AbstractFlyingObject <|-- AbstractAircraft
+AbstractFlyingObject <|-- BaseBullet
+AbstractFlyingObject <|-- AbstractSupply
+
+AbstractAircraft <|-- HeroAircraft
+AbstractAircraft <|-- AbstractEnemy
+
+AbstractEnemy <|-- MobEnemy
+AbstractEnemy <|-- EliteEnemy
+AbstractEnemy <|-- BossEnemy
+
+BaseBullet <|-- HeroBullet
+BaseBullet <|-- EnemyBullet
+
+AbstractSupply <|-- HealthSupply
+AbstractSupply <|-- FireSupply
+AbstractSupply <|-- BombSupply
+
+AircraftFactory <|.. MobFactory
+AircraftFactory <|.. EliteFactory
+AircraftFactory <|.. BossFactory
+
+MobFactory ..> MobEnemy
+EliteFactory ..> EliteEnemy
+BossFactory ..> BossEnemy
+
+
+SupplyFactory <|.. HealthSupplyFactory
+SupplyFactory <|.. FireSupplyFactory
+SupplyFactory <|.. BombSupplyFactory
+
+HealthSupplyFactory ..> HealthSupply
+FireSupplyFactory ..> FireSupply
+BombSupplyFactory ..> BombSupply
+
+AircraftFactory ..> AbstractEnemy
+SupplyFactory ..>AbstractSupply
+
+ScoreDaoImpl --> ScoreRecord
+ScoreDao <|.. ScoreDaoImpl
+
+TrajectoryStrategy <|.. DirectShootStrategy
+TrajectoryStrategy <|.. ScatteredShootStrategy
+
+AbstractAircraft o--> TrajectoryStrategy
+@enduml

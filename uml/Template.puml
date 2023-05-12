@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class Game{
+    - someAttributes
+    - ...
+
+    + Game()
+    + action():void
+    + timeCountAndNewCycleJudge():boolean
+    + summonEnemy():void
+    + shootAction():void
+    + bulletsMoveAction():void
+    + enemyMoveAction():void
+    + supplyMoveAction():void
+    + crashCheckAction():void
+    + vanishCheck():void
+    + postProcessAction():void
+    - paint(Graphics g):void
+    - paintImageWithPositionRevised(Graphics g, List<? extends AbstractFlyingObject> objects):void
+    - paintScoreAndLife(Graphics g):void
+    - paintSpecialEffect(Graphics g):void
+}
+
+class EasyGame{
+    + EasyGame()
+    + {override}summonEnemy():void
+}
+
+class CommonGame{
+    + CommonGame()
+}
+
+class HardGame{
+    + HardGame()
+    + {override}summonEnemy():void
+    + reinforceEnemyAndHero():void
+}
+
+class StaticConfiguration{
+   +{static}difficultyMode:int
+   +{static}timeInterval:int
+   +{static}cycleDuration:int
+   +{static}enemyMaxNumber:int
+   +{static}mobSpeedY:int
+   +{static}eliteSpeedY:int
+   +{static}eliteShootInterval:int
+   +{static}heroBasicFire:int
+   +{static}mobHp:int
+   +{static}eliteHp:int
+   +{static}bossHp =:int
+   +{static}ratioOfEliteEnemy:double
+}
+
+Game <|-- EasyGame
+Game <|-- CommonGame
+Game <|-- HardGame
+Game o--> StaticConfiguration
+
+@enduml
